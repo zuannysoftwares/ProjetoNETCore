@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 export class EventosComponent implements OnInit {
 
   // Encapsulamento
+  // tslint:disable-next-line: variable-name
   _filtroLista: string;
   get filtroLista(): string{
     return this._filtroLista;

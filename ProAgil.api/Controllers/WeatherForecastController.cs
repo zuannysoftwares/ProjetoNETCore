@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProAgil.api.Data;
-using ProAgil.api.Model;
+using ProAgil.Repository;
+using ProAgil.Domain;
 
 namespace ProAgil.api.Controllers
 {
@@ -15,8 +15,8 @@ namespace ProAgil.api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        public readonly DataContext _context;
-        public WeatherForecastController(DataContext context)
+        public readonly ProAgilContext _context;
+        public WeatherForecastController(ProAgilContext context)
         {
             _context = context;
         }
@@ -39,7 +39,7 @@ namespace ProAgil.api.Controllers
         {
             try
             {
-                var results = await _context.Eventos.FirstOrDefaultAsync(x => x.EventoId == id);
+                var results = await _context.Eventos.FirstOrDefaultAsync(x => x.Id == id);
                 return Ok(results);
             }
             catch (System.Exception)
