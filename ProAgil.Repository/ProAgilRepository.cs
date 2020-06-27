@@ -11,6 +11,8 @@ namespace ProAgil.Repository
         public ProAgilRepository(ProAgilContext context)
         {
             _context = context;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //A linha Acima diz que não quero que esse ambiente seja rastreável. Com isso, eu não travo o EntityFramework
         }
 
         public void Add<T>(T entity) where T : class//Onde T é uma CLASSE

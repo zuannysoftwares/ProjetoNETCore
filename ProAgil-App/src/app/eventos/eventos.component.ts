@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Local } from 'protractor/built/driverProviders';
-import { HttpClient } from '@angular/common/http';
+import { EventoService } from '../_services/evento.service';
+import { Evento } from '../_models/Evento';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-eventos',
@@ -8,10 +10,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent implements OnInit {
+  eventosFiltrados: Evento[];
+  eventos: Evento[];
+  imagemLargura = 50;
+  imagemMargem = 2;
+  mostrarImagem = false;
+  modalRef: BsModalRef;
 
   // Encapsulamento
   // tslint:disable-next-line: variable-name
-  _filtroLista: string;
+  _filtroLista = '';
+
+  constructor(private eventoService: EventoService, private modalService: BsModalService) { }
+
   get filtroLista(): string{
     return this._filtroLista;
   }
@@ -20,19 +31,16 @@ export class EventosComponent implements OnInit {
     this.eventosFiltrados = this.filtroLista ? this.filtrarEventos(this.filtroLista) : this.eventos;
   }
 
-  eventosFiltrados: any = [];
-  eventos: any = [];
-  imagemLargura = 50;
-  imagemMargem = 2;
-  mostrarImagem = false;
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
 
-  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.getEventos();
   }
 
-  filtrarEventos(filtrarPor: string): any {
+  filtrarEventos(filtrarPor: string): Evento[] {
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.eventos.filter(
       evento => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1
@@ -44,10 +52,11 @@ export class EventosComponent implements OnInit {
   }
 
   getEventos(){
-    this.http.get('http://localhost:5000/weatherforecast').subscribe(response => {
-      this.eventos = response;
-    }, error => {
-      console.log(error);
+    this.eventoService.getAllEvento().subscribe(
+      (_eventos: Evento[]) => {
+        this.eventos = _eventos;
+      }, error => {
+        console.log(error);
       });
   }
 }

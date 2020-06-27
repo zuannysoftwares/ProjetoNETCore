@@ -83,7 +83,9 @@ namespace ProAgil.api.Controllers
         {
             try
             {
+                //Se NÃO encontrar na base o evento com esse ID, RETORNA NotFound(), Se não, ATUALIZA
                 var evento = await _repo.GetAllEventoAsyncById(eventoId, false);
+                
                 if(evento == null) return NotFound();
 
                 _repo.Update(model);
