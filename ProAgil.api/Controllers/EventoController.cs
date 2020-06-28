@@ -1,18 +1,23 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProAgil.api.Dtos;
 using ProAgil.Domain;
 using ProAgil.Repository;
 
 namespace ProAgil.api.Controllers
 {
-    [ApiController]
+    [ApiController]//Com isso, eu faço as validações com o DataAnotation nas entidades e não preciso usar o ModelState.Isvalid e o FromBody dos métodos POST e PUT
     [Route("[controller]")]
     public class EventoController : ControllerBase
     {
         private readonly IProAgilRepository _repo;
-        public EventoController(IProAgilRepository repo)
+        private readonly IMapper _mapper;
+        public EventoController(IProAgilRepository repo, IMapper mapper)
         {
+            _mapper = mapper;
             _repo = repo;
         }
 
@@ -21,7 +26,9 @@ namespace ProAgil.api.Controllers
         {
             try
             {
-                var results = await _repo.GetAllEventoAsync(true);
+                var evento = await _repo.GetAllEventoAsync(true);
+                var results = _mapper.Map<IEnumerable<EventoDto>>(evento);
+
                 return Ok(results);
             }
             catch (System.Exception)
@@ -35,7 +42,9 @@ namespace ProAgil.api.Controllers
         {
             try
             {
-                var results = await _repo.GetAllEventoAsyncById(id, true);
+                var evento = await _repo.GetAllEventoAsyncById(id, true);
+                var results = _mapper.Map<EventoDto>(evento);
+
                 return Ok(results);
             }
             catch (System.Exception)
@@ -49,7 +58,9 @@ namespace ProAgil.api.Controllers
         {
             try
             {
-                var results = await _repo.GetAllEventoAsyncByTema(tema, true);
+                var evento = await _repo.GetAllEventoAsyncByTema(tema, true);
+                var results = _mapper.Map<IEnumerable<EventoDto>>(evento);
+                
                 return Ok(results);
             }
             catch (System.Exception)
@@ -59,14 +70,17 @@ namespace ProAgil.api.Controllers
         }
  
         [HttpPost]
-        public async Task<IActionResult> Post(Evento model)
+        public async Task<IActionResult> Post(EventoDto model)
         {
             try
             {
-                _repo.Add(model);
+                //Inversão de mapeamento
+                var evento = _mapper.Map<Evento>(model);
+
+                _repo.Add(evento);
                 if(await _repo.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{model.Id}", model);
+                    return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
                       
                 }
             }
@@ -79,7 +93,7 @@ namespace ProAgil.api.Controllers
         }
 
         [HttpPut("{EventoId}")]
-        public async Task<IActionResult> Put(int eventoId, Evento model)
+        public async Task<IActionResult> Put(int eventoId, EventoDto model)
         {
             try
             {
@@ -88,11 +102,13 @@ namespace ProAgil.api.Controllers
                 
                 if(evento == null) return NotFound();
 
-                _repo.Update(model);
+                _mapper.Map(model, evento);
+
+                _repo.Update(evento);
 
                 if(await _repo.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{model.Id}", model);
+                    return Created($"/api/evento/{model.Id}", _mapper.Map<EventoDto>(evento));
                 }
             }
             catch (System.Exception)

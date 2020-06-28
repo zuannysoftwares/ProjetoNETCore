@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,8 +29,11 @@ namespace ProAgil.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDbContext<ProAgilContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IProAgilRepository, ProAgilRepository>();
+            services.AddDbContext<ProAgilContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));//Retorna a conexão com o banco de dados
+            services.AddScoped<IProAgilRepository, ProAgilRepository>();//Significa que tem uma interface e uma classe para métodos comuns num repositorio
+            
+            services.AddAutoMapper();//Significa que o sistema utiliza Auto Mapper
+
             services.AddControllers();
         }
 
