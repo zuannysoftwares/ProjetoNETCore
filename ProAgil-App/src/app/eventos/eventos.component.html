@@ -1,5 +1,6 @@
 <!-- [(ngModel)] Isso se chama TwoWay-DataBind  -->
 <!-- {{}} Isso se chama Interpolação  -->
+<app-titulo [title]="title"></app-titulo>
 <hr>
 <div class="d-flex">
   <div class="form-inline mr-auto">
@@ -73,7 +74,7 @@
       </td>
     </tr>
   </tbody>
-  <tfoot *ngIf="!eventos.length">
+  <tfoot *ngIf="!eventos">
     <tr>
       <td colspan="7" class="text-center">
         <h4>
@@ -124,7 +125,7 @@
             </div>
             <div class="form-group col-md-4">
               <label>Data</label>
-              <input type="text" class="form-control" bsDatepicker [bsConfig]="{dateInputFormat : 'DD/MM/YYYY hh:mm a' }"
+              <input type="text" class="form-control" bsDatepicker value="{{dataEvento | DatetimeFormatPipe}}" [(ngModel)]="dataEvento" [bsConfig]="{dateInputFormat : 'DD/MM/YYYY hh:mm a' }"
               [ngClass]="{'is-invalid' : registerForm.get('dataEvento').errors && registerForm.get('dataEvento').touched}" 
               formControlName="dataEvento" placeholder="Insira a data do Evento">
               <div class="invalid-feedback" *ngIf="registerForm.get('dataEvento').hasError('required') && registerForm.get('dataEvento').touched">

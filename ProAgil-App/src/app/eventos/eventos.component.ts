@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Local } from 'protractor/built/driverProviders';
 import { EventoService } from '../_services/evento.service';
 import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -7,7 +6,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale} from 'ngx-bootstrap/locale';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
-import { error } from 'protractor';
+import { ToastrService } from 'ngx-toastr';
+
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -16,6 +16,9 @@ defineLocale('pt-br', ptBrLocale);
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent implements OnInit {
+
+  title = 'Lista de Eventos';
+
   eventosFiltrados: Evento[];
   eventos: Evento[];
   evento: Evento;
@@ -36,7 +39,8 @@ export class EventosComponent implements OnInit {
     private eventoService: EventoService,
     private modalService: BsModalService,
     private fb: FormBuilder,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private toastr: ToastrService
     ) {
       this.localeService.use('pt-br'); // usado para formatar o datepicker dd/MM/yyyy
     }
@@ -72,7 +76,9 @@ export class EventosComponent implements OnInit {
         () => {
           template.hide();
           this.getEventos();
+          this.toastr.success('Evento excluído com sucesso');
         }, error => {
+          this.toastr.error('Não foi possível excluir o evento');
           console.log(error);
         }
       );
@@ -108,7 +114,9 @@ export class EventosComponent implements OnInit {
               console.log(novoEvento);
               template.hide();
               this.getEventos();
+              this.toastr.success('Evento Salvo com sucesso!');
             }, error => {
+              this.toastr.error(`Não foi possível salvar o Evento: ${error}`);
               console.log(error);
             }
           );
@@ -119,7 +127,9 @@ export class EventosComponent implements OnInit {
               console.log(novoEvento);
               template.hide();
               this.getEventos();
+              this.toastr.success('Evento Atualizado com sucesso!');
             }, error => {
+              this.toastr.error(`Não foi possível Editar o Evento: ${error}`);
               console.log(error);
             }
           );
@@ -131,7 +141,7 @@ export class EventosComponent implements OnInit {
         tema: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
         local: ['', Validators.required],
         dataEvento: ['', Validators.required],
-        qtdPessoas: ['',[Validators.required, Validators.max(500)]],
+        qtdPessoas: ['', [Validators.required, Validators.max(500)]],
         imageUrl: ['', Validators.required],
         telefone: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]]
@@ -142,6 +152,7 @@ export class EventosComponent implements OnInit {
         (_eventos: Evento[]) => {
           this.eventos = _eventos;
         }, error => {
+          this.toastr.error(`Não foi possível Carregar os Eventos: ${error}`);
           console.log(error);
         });
       }
