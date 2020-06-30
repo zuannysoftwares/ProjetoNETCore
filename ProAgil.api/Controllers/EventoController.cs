@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -140,6 +142,36 @@ namespace ProAgil.api.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0]; //Pego o arquivo
+                var folderName = Path.Combine("Resources", "Images"); // O diretório/pasta onde será armazenado o arquivo
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); //Combinando o diretorio da minha aplicação com a pasta que quero armazenar
+
+                if(file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;// Pego o nome do meu arquivo
+                    var fullPath = Path.Combine(pathToSave, fileName.Replace("\"", " ").Trim());// Se no nome vier aspas ou espaço, eu removo isso
+
+                    using(var stream = new FileStream(fullPath, FileMode.Create))//Crio um arquivo no FileStream
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return Ok();
+            }
+            catch(System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível realizar o Upload da imagem");
+            }
+
+            return BadRequest("Ocorreu um erro. Tente novamente mais tarde");
         }
     }
 }

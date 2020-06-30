@@ -1,5 +1,6 @@
 <!-- [(ngModel)] Isso se chama TwoWay-DataBind  -->
 <!-- {{}} Isso se chama Interpolação  -->
+<!-- {{vr} usei para que quando alterar a imagem, seja recarregado o grid após salvar -->
 <app-titulo [title]="title"></app-titulo>
 <hr>
 <div class="d-flex">
@@ -43,7 +44,7 @@
     <tr *ngFor="let evento of eventosFiltrados">
       <td>
         <img *ngIf="mostrarImagem"
-          src="http://localhost:5000/img/{{evento.imageUrl}}"
+          src="http://localhost:5000/resources/images/{{evento.imageUrl}}?_v={{vr}}"
           [style.width.px]="imagemLargura"
           [style.margin.px]="imagemMargem">
       </td>
@@ -148,9 +149,16 @@
             </div>
             <div class="form-group col-md-9">
               <label>Imagem</label>
-              <input type="text" class="form-control" 
-              [ngClass]="{'is-invalid' : registerForm.get('imageUrl').errors && registerForm.get('imageUrl').touched}"
-              formControlName="imageUrl" placeholder="Insira uma imagem para o Evento">
+              <table>
+                <tr>
+                  <td>
+                    <button class="btn btn-success" (click)="file.click()"></button>
+                    <input type="file" #file class="form-control" 
+                    [ngClass]="{'is-invalid' : registerForm.get('imageUrl').errors && registerForm.get('imageUrl').touched}" (change)="onFileChange($event)"
+                    formControlName="imageUrl" placeholder="Insira uma imagem para o Evento" style="display: none;">
+                  </td>
+                </tr>
+              </table>
               <div class="invalid-feedback" *ngIf="registerForm.get('imageUrl').hasError('required') && registerForm.get('imageUrl').touched">
                 A Imagem é obrigatório
               </div>
