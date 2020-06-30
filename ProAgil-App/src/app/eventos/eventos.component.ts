@@ -116,13 +116,13 @@ export class EventosComponent implements OnInit {
     onFileChange(event){
       const reader = new FileReader();
 
-      if(event.target.files && event.target.files.length){
+      if (event.target.files && event.target.files.length){
         this.file = event.target.files;
       }
     }
 
     uploadImagem(){
-      if(this.modoSalvar === 'post'){
+      if (this.modoSalvar === 'post'){
         const nomeArquivo = this.evento.imageUrl.split('\\', 3);
         this.evento.imageUrl = nomeArquivo[2];
         this.eventoService.postUpload(this.file, nomeArquivo[2]).subscribe(
@@ -192,7 +192,7 @@ export class EventosComponent implements OnInit {
     }
     getEventos(){
       this.eventoService.getAllEvento().subscribe(
-        (_eventos: Evento[]) => {
+        ( _eventos: Evento[] ) => {
           this.eventos = _eventos;
         }, error => {
           this.toastr.error(`Não foi possível Carregar os Eventos: ${error}`);
