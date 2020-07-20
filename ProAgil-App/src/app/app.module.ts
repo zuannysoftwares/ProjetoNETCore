@@ -6,6 +6,9 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule, BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgxMaskModule } from 'ngx-mask';
+import { NgxCurrencyModule } from 'ngx-currency';
 import { AppRoutingModule } from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -15,6 +18,7 @@ import { EventoService } from './_services/evento.service';
 
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
+import { EventoEditComponent } from './eventos/eventoEdit/eventoEdit.component';
 import { NavComponent } from './nav/nav.component';
 
 import { DatetimeFormatPipePipe } from './_helps/DatetimeFormatPipe.pipe';
@@ -32,6 +36,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
    declarations: [
       AppComponent,
       EventosComponent,
+      EventoEditComponent,
       NavComponent,
       DatetimeFormatPipePipe,
       PalestrantesComponent,
@@ -49,6 +54,9 @@ import { AuthInterceptor } from './auth/auth.interceptor';
       BsDatepickerModule.forRoot(),
       TooltipModule.forRoot(),
       ModalModule.forRoot(),
+      TabsModule.forRoot(),
+      NgxMaskModule.forRoot(),
+      NgxCurrencyModule,
       BrowserAnimationsModule,
       ToastrModule.forRoot(),
       AppRoutingModule,

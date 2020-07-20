@@ -191,6 +191,8 @@ export class EventosComponent implements OnInit {
       });
     }
     getEventos(){
+      this.vr = new Date().getMilliseconds().toString();
+
       this.eventoService.getAllEvento().subscribe(
         ( _eventos: Evento[] ) => {
           this.eventos = _eventos;
