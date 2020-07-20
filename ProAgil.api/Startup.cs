@@ -37,7 +37,7 @@ namespace ProAgil.api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDbContext<ProAgilContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));//Retorna a conexão com o banco de dados
+            services.AddDbContext<ProAgilContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));//Retorna a conexão com o banco de dados
             
             IdentityBuilder builder = services.AddIdentityCore<User>(options => {
                 options.Password.RequireDigit = false;
