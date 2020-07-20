@@ -55,7 +55,7 @@ export class EventoEditComponent implements OnInit {
             this.evento = Object.assign({}, evento); // Copia o evento passado por parâmetro para o evento já carregado para edição
             this.fileNameToUpdate = evento.imageUrl.toString();
 
-            this.imagemURL = `http://localhost:5000/resources/images/${{this.evento.imageUrl}}?_v=${{this.dataAtual}}`;
+            this.imagemURL = `http://localhost:5000/resources/images/${this.evento.imageUrl}?_v=${this.dataAtual}`;
 
             this.evento.imageUrl = '';
             this.registerForm.patchValue(this.evento);
@@ -125,7 +125,7 @@ export class EventoEditComponent implements OnInit {
 
       reader.onload = (event: any) => this.imagemURL = event.target.result;
 
-      this.file = event.target.files;
+      // this.file = event.target.files;
 
       reader.readAsDataURL(file[0]);
     }
@@ -153,7 +153,7 @@ export class EventoEditComponent implements OnInit {
         this.eventoService.postUpload(this.file, this.fileNameToUpdate).subscribe(
           () => {
             this.dataAtual = new Date().getMilliseconds().toString();
-            this.imagemURL = `http://localhost:5000/resources/images/${{this.evento.imageUrl}}?_v=${{this.dataAtual}}`;
+            this.imagemURL = `http://localhost:5000/resources/images/${this.evento.imageUrl}?_v=${this.dataAtual}`;
           }
         );
       }

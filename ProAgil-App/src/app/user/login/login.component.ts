@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-login',

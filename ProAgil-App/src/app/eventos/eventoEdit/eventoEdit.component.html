@@ -36,7 +36,7 @@
             <div class="form-group col-md-4">
               <label>Data e Hora</label>
               <input type="text" class="form-control" [(ngModel)]="evento.dataEvento" bsDatepicker
-                value="{{evento.dataEvento | DatetimeFormatPipe}}" [(ngModel)]="dataEvento"
+                value="{{evento.dataEvento | DatetimeFormatPipe}}"
                 [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm' }" [ngClass]="{'is-invalid': registerForm.get('dataEvento').errors 
             && registerForm.get('dataEvento').touched}" formControlName="dataEvento" placeholder="">
               <div *ngIf="registerForm.get('dataEvento').hasError('required')
